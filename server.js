@@ -11,9 +11,12 @@ app.use(express.static(path.join(__dirname, "views")));
 app.use(
   "/n320nodejs",
   function (req, res, next) {
-    console.log(req.url);
     if (req.url.endsWith(".html")) {
-      res.redirect(req.url);
+      const safeHost = req.headers.host.includes("http")
+        ? req.header.host
+        : "http://" + req.headers.host;
+      res.redirect(safeHost + req.url);
+      //   next();
     } else {
       next();
     }
